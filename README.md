@@ -29,14 +29,61 @@ Aucune vraie arnaque, juste du fun et des cadeaux inattendus !
 - **Frontend** : HTML/CSS (style URSS, images et slogans)
 - **Déploiement** : NGINX sur Raspberry Pi
 
-## Mise en route
+## Mise en route (Raspberry Pi conseillé)
 
-1. Clone le projet sur ton Raspberry Pi
-2. Installe les dépendances : `npm install`
-3. Lance le serveur Node.js : `node app.js`
-4. Configure NGINX pour pointer vers Express
-5. Ouvre le site sur le réseau local et que la fête commence !
+1. **Installer Node.js**  
+   Si ce n'est pas déjà fait, installe Node.js sur le Raspberry Pi :
+   ```sh
+   sudo apt update
+   sudo apt install nodejs npm
+   ```
 
+2. **Cloner le projet sur ton Raspberry Pi**
+   ```sh
+   git clone https://github.com/<ton-utilisateur>/JackpotURSS.git
+   cd JackpotURSS
+   ```
+
+3. **Initialiser le projet et installer les dépendances**
+   ```sh
+   npm install
+   ```
+   Les dépendances principales sont :
+   - `express` (serveur web)
+   - `bootstrap` (frontend, via CDN dans le HTML)
+
+4. **Lancer le serveur Node.js**
+   ```sh
+   node app.js
+   ```
+   Le serveur démarre par défaut sur le port 3000.
+
+5. **Accéder au site en local**
+   Sur le Raspberry Pi ou tout appareil du réseau local, ouvre :
+   ```
+   http://<ip-du-pi>:3000
+   ```
+   Pour obtenir l'IP du Pi :
+   ```sh
+   hostname -I
+   ```
+
+6. **Rendre le site accessible dans le monde**
+   - Ouvre et redirige le port 3000 (ou 80 si tu utilises NGINX) sur ta box Internet vers l'IP du Raspberry Pi.
+   - Accède au site via l'IP publique de ta connexion.
+   - **Optionnel :** Configure NGINX en reverse proxy pour utiliser le port 80 et HTTPS (avec Let's Encrypt pour un certificat SSL gratuit).
+
+---
+
+## Exemple d'installation des dépendances
+
+Si tu veux tout installer rapidement :
+```sh
+npm init -y
+npm install express
+```
+
+---
 ---
 
 **JackpotURSS** – Pour une révolution vidéoludique… et beaucoup de rires !
