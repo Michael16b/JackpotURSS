@@ -1,0 +1,23 @@
+{
+  "name": "jackpoturss",
+  "version": "1.0.0",
+  "description": "Bienvenue sur **JackpotURSS**, le site d'anniversaire le plus révolutionnaire du web, où le rêve soviétique du jeu vidéo devient réalité !",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Michael16b/JackpotURSS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Michael16b/JackpotURSS/issues"
+  },
+  "homepage": "https://github.com/Michael16b/JackpotURSS#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
