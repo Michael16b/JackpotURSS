@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Pour servir la page d'accueil
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Endpoint pour recevoir les clés Steam
@@ -22,6 +22,6 @@ app.get('/jackpot', (req, res) => {
   res.json({ keys: randomKeys });
 });
 
-app.listen(PORT, () => {
-  console.log(`JackpotURSS tourne sur http://localhost:${PORT}`);
+app.listen(3000, '::', () => {
+  console.log('Serveur Node.js écoute en IPv6');
 });
