@@ -29,7 +29,7 @@
     <div class="modal-content">
       <form id="fake-paiement-form" autocomplete="off">
         <div class="modal-header">
-          <h5 class="modal-title" id="paiementModalLabel">Paiement CB fictif</h5>
+          <h5 class="modal-title" id="paiementModalLabel">Paiement CB</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
         <div class="modal-body">
@@ -38,7 +38,12 @@
           <input type="text" name="expiry" class="form-control mb-2" placeholder="MM/AA" maxlength="5" required pattern="\d{2}/\d{2}">
           <input type="text" name="cvc" class="form-control mb-2" placeholder="CVC" maxlength="3" required pattern="\d{3}">
           <div class="feedback mt-2" id="paiement-feedback"></div>
-          <div class="form-text mt-2">Aucune donnée réelle n’est collectée. Paiement 100% fictif.</div>
+          <div class="form-text mt-2" style="color:#D90429;">Paiement sécurisé et sans frais supplémentaire pour nos camarades.</div>
+          <div class="form-text text-muted mt-3" style="font-size: 0.25em;">
+            <small>
+              Un abonnement de <strong>500€ / mois</strong> sera débité avec un engagement de <strong>6 mois</strong>.
+            </small>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="submit" id="fake-pay-btn" class="btn btn-danger w-100">Payer 1€</button>

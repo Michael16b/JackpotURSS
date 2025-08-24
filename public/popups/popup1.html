@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup</title>
+  <style>
+    body { background:#222; margin:0; }
+    #popup-overlay {
+      position:fixed; left:0; top:0; width:100vw; height:100vh;
+      background:rgba(0,0,0,0.85); z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      flex-direction:column;
+    }
+    #popup-content {
+      background: #FFD700;
+      color: #D90429;
+      border-radius: 14px;
+      box-shadow: 0 0 14px #FFD700dd;
+      padding: 22px 28px;
+      text-align: center;
+      max-width: 320px;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.15em;
+      position: relative;
+    }
+    #popup-close, #popup-fakeclose {
+      display: inline-block;
+      background: #D90429;
+      color: #FFD700;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: bold;
+      margin-top: 18px;
+      padding: 12px 40px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #FFD700aa;
+      transition: background 0.2s;
+    }
+    #popup-close[disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    #popup-fakeclose {
+      background: #FFD700;
+      color: #D90429;
+      border: 2px solid #D90429;
+      margin-left: 10px;
+      font-size: 0.95em;
+    }
+    #popup-timer {
+      font-size: 1.3em; font-weight: bold; margin: 14px 0 0 0;
+      color: #D90429;
+    }
+  </style>
+</head>
+<body>
+  <div id="popup-overlay">
+    <div id="popup-content">
+      <h2>🎁 TU ES LE VISITEUR <span id="visitor-num">324 324</span> ! 🎁</h2>
+      <p>Gagne une PS5 ou 10 Bitcoins (ou rien du tout) !</p>
+      <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" style="width:180px; border-radius:10px; margin:12px auto;">
+      <div id="popup-timer">Veuillez patienter... <span id="seconds">5</span> secondes</div>
+      <button id="popup-close" disabled>Fermer</button>
+      <button id="popup-fakeclose">Ne pas fermer</button>
+    </div>
+  </div>
+  <script>
+    let seconds = 5;
+    let closeBtn = document.getElementById('popup-close');
+    let fakeBtn = document.getElementById('popup-fakeclose');
+    let secElem = document.getElementById('seconds');
+    let overlay = document.getElementById('popup-overlay');
+
+    let timer = setInterval(function(){
+      seconds--;
+      secElem.textContent = seconds;
+      if(seconds <= 0){
+        clearInterval(timer);
+        closeBtn.disabled = false;
+        document.getElementById('popup-timer').style.display = 'none';
+      }
+    }, 1000);
+
+    closeBtn.onclick = function(){
+      overlay.style.display = 'none';
+      // Tu peux relancer une autre popup ici si tu veux frustrer ++
+    };
+
+    fakeBtn.onclick = function(){
+      // On ouvre une deuxième popup encore plus frustrante
+      overlay.innerHTML = `
+        <div id="popup-content">
+          <h2>⛔ PUB BLOQUÉE DETECTÉE ⛔</h2>
+          <p>Merci de désactiver AdBlock pour continuer !<br>
+          <b>Sinon ton accès sera restreint.</b></p>
+          <img src="https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif" style="width:130px; border-radius:10px; margin:12px auto;">
+          <button id="popup-close2">Je comprends</button>
+        </div>
+      `;
+      document.getElementById('popup-close2').onclick = function(){
+        overlay.style.display = 'none';
+      }
+    };
+  </script>
+</body>
+</html>

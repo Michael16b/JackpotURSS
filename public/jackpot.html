@@ -2,36 +2,292 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Jackpot URSS</title>
+  <title>JACKPOT URSS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .carousel-urss {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      height: 430px;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: #FFD700;
+      color: #D90429;
+      border: 3px solid #D90429;
+      border-radius: 50%;
+      width: 54px;
+      height: 54px;
+      font-size: 2.4rem;
+      font-family: 'Oswald', Impact, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 0 14px #FFD70088;
+      display: flex;
+      justify-content: center;
+      transition: background 0.2s;
+      user-select: none;
+      padding: 0;
+      line-height: 1;
+    }
+    .carousel-arrow.left { left: 1px; }
+    .carousel-arrow.right { right: 1px; }
+
+    .carousel-items {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      position: relative;
+      justify-content: center;
+    }
+    .carousel-game {
+      transition: all 0.6s cubic-bezier(.77,0,.18,1);
+      position: absolute;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .carousel-game.center {
+      left: 50%;
+      transform: translate(-50%, 0) scale(1);
+      width: 380px;
+      opacity: 1;
+      z-index: 20;
+      box-shadow: 0 0 32px #FFD700;
+      pointer-events: auto;
+    }
+    .carousel-game.left {
+      left: 10%;
+      transform: translate(-40%, 0) scale(0.7);
+      width: 210px;
+      opacity: 0.7;
+      z-index: 2;
+      filter: blur(1.5px);
+      box-shadow: 0 0 18px #FFD70088;
+    }
+    .carousel-game.right {
+      right: 10%;
+      transform: translate(40%, 0) scale(0.7);
+      width: 210px;
+      opacity: 0.7;
+      z-index: 2;
+      filter: blur(1.5px);
+      box-shadow: 0 0 18px #FFD70088;
+    }
+    .carousel-game img {
+      width: 100%;
+      border-radius: 16px;
+      border: 4px solid #FFD700;
+      background: #222;
+    }
+    .carousel-title {
+      text-align: center;
+      font-family: 'Oswald', 'Arial Black', Impact, sans-serif;
+      color: #FFD700;
+      font-size: 2.2rem;
+      text-shadow: 2px 2px 8px #8B0000;
+      background: #222;
+      border-radius: 10px;
+      margin: 18px auto 0 auto;
+      padding: 10px 18px;
+      letter-spacing: 2px;
+      box-shadow: 0 0 12px #FFD700;
+      border: 2px solid #FFD700;
+      width: fit-content;
+    }
+    .carousel-key-container {
+      text-align: center;
+      margin: 22px 0 0 0;
+    }
+    .blurred-key {
+      filter: blur(0.4em);
+      opacity: 0.65;
+      user-select: none;
+      pointer-events: none;
+      transition: filter 0.4s, opacity 0.4s;
+      letter-spacing: 2px;
+    }
+    .urss-key {
+      padding: 7px 14px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #FFD70055;
+      display: inline-block;
+      background: #D90429;
+      color: #FFD700;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: 1px solid #FFD700;
+    }
+
+    .fixed-bottom-urss {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      z-index: 999;
+      background: linear-gradient(90deg, #D90429 60%, #FFD700 100%);
+      padding: 16px 0 12px 0;
+      box-shadow: 0 -4px 24px #222;
+      text-align: center;
+    }
+
+    @media (max-width: 992px) {
+      .carousel-game.center {
+        width: 260px;
+      }
+      .carousel-game.left,
+      .carousel-game.right {
+        width: 130px;
+      }
+      .carousel-title {
+        font-size: 1.5rem;
+        padding: 8px 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .carousel-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 1.5rem;
+        border-width: 2px;
+      }
+      .carousel-game.center {
+        box-shadow: 0 0 12px #FFD700;
+      }
+      .carousel-game.left,
+      .carousel-game.right {
+        width: 60px;
+        box-shadow: 0 0 6px #FFD70088;
+      }
+      .carousel-title {
+        font-size: 1rem;
+        padding: 6px 6px;
+      }
+      .fixed-bottom-urss {
+        padding: 10px 0 8px 0;
+      }
+      .urss-key {
+        font-size: 0.95em;
+        padding: 4px 7px;
+      }
+      .carousel-key-container {
+        margin-top: 12px;
+      }
+    }
+    @media (max-width: 400px) {
+      .carousel-title {
+        font-size: 0.7rem;
+        padding: 2px 4px;
+      }
+    }
+  </style>
 </head>
-<body>
-  <div class="container mt-5">
-    <h2 class="mb-4">Voici tes jeux camarade :</h2>
-    <div id="jeux-list" class="row"></div>
-    <a href="/" class="btn btn-danger mt-4">Revenir à l'accueil</a>
+<body class="bg-urss">
+  <div class="container py-4">
+    <div class="text-center mb-4">
+      <h2 class="urss-title">🎰 JACKPOT URSS 🎰</h2>
+      <div class="urss-tagline">“Seul le jeu du peuple est digne de ta fortune, camarade !”</div>
+    </div>
+    <div class="carousel-urss">
+      <div class="carousel-arrow left" onclick="prevGame()" title="Jeu précédent">&#9664;</div>
+      <div class="carousel-items" id="carousel-items"></div>
+      <div class="carousel-arrow right" onclick="nextGame()" title="Jeu suivant">&#9654;</div>
+    </div>
+  </div>
+  <!-- Bouton fixé en bas de page -->
+  <div class="fixed-bottom-urss">
+    <a href="/" class="btn urss-btn">RETOUR À L'ACCUEIL</a>
   </div>
   <script>
-    // Au chargement, récupère les jeux en AJAX
+    let jeux = [];
+    let currentIndex = 0;
+
     fetch('/api/jackpot')
       .then(res => res.json())
       .then(data => {
-        const jeuxDiv = document.getElementById('jeux-list');
-        jeuxDiv.innerHTML = data.jeux.map(j => `
-          <div class="col-md-4 mb-4">
-            <div class="card h-100">
-              <img src="${j.image}" class="card-img-top" alt="${j.nom}">
-              <div class="card-body">
-                <h5 class="card-title">${j.nom}</h5>
-                <p class="card-text"><strong>Clé Steam :</strong> ${j.key || "Non disponible"}</p>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      })
-      .catch(err => {
-        document.getElementById('jeux-list').innerHTML = "<div class='alert alert-danger'>Erreur serveur.</div>";
+        jeux = data.jeux;
+        renderCarousel();
+      }).catch(err => {
+        document.getElementById('carousel-items').innerHTML = "<div class='alert alert-danger'>Erreur serveur.</div>";
       });
+
+    function renderCarousel() {
+      const container = document.getElementById('carousel-items');
+      container.innerHTML = '';
+      const prevIdx = currentIndex > 0 ? currentIndex - 1 : null;
+      const nextIdx = currentIndex < jeux.length - 1 ? currentIndex + 1 : null;
+
+      // Jeu précédent (partiel à gauche)
+      if (prevIdx !== null) {
+        container.innerHTML += `
+          <div class="carousel-game left">
+            <img src="${jeux[prevIdx].image}" alt="${jeux[prevIdx].nom}">
+          </div>
+        `;
+      }
+      // Jeu central
+      container.innerHTML += `
+        <div class="carousel-game center">
+          <img src="${jeux[currentIndex].image}" alt="${jeux[currentIndex].nom}">
+          <div class="carousel-title">${jeux[currentIndex].nom}</div>
+          <div class="carousel-key-container">
+            <span id="key-${currentIndex}" class="urss-key blurred-key">${jeux[currentIndex].key || "Non disponible"}</span>
+            <br>
+            <button type="button" class="btn urss-btn mt-2" onclick="showKey(${currentIndex})">Voir la clé</button>
+          </div>
+        </div>
+      `;
+      // Jeu suivant (partiel à droite)
+      if (nextIdx !== null) {
+        container.innerHTML += `
+          <div class="carousel-game right">
+            <img src="${jeux[nextIdx].image}" alt="${jeux[nextIdx].nom}">
+          </div>
+        `;
+      }
+    }
+
+    function showKey(idx) {
+      const keyElem = document.getElementById('key-' + idx);
+      if (keyElem) {
+        keyElem.classList.remove('blurred-key');
+        keyElem.style.opacity = 1;
+        keyElem.style.filter = 'none';
+      }
+    }
+
+    function prevGame() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCarousel();
+      }
+    }
+    function nextGame() {
+      if (currentIndex < jeux.length - 1) {
+        currentIndex++;
+        renderCarousel();
+      }
+    }
+
+    // Optionnel : navigation au clavier
+    document.addEventListener('keydown', function(e){
+      if (e.key === "ArrowLeft") prevGame();
+      if (e.key === "ArrowRight") nextGame();
+    });
   </script>
 </body>
 </html>
