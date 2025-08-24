@@ -14,9 +14,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/api/jackpot', (req, res) => {
+app.get('/api/jackpot', async (req, res) => {
   try {
-    const jeuxAvecKeys = getJeuxAvecKeys();
+    const jeuxAvecKeys = await getJeuxAvecKeys();
     res.json({ jeux: jeuxAvecKeys });
   } catch (error) {
     console.error("Erreur dans /jackpot :", error);
@@ -26,14 +26,9 @@ app.get('/api/jackpot', (req, res) => {
 
 
 app.get('/jackpot', (req, res) => {
-  try {
-    const jeuxAvecKeys = getJeuxAvecKeys();
-    res.json({ jeux: jeuxAvecKeys });
-  } catch (error) {
-    console.error("Erreur dans /jackpot :", error);
-    res.status(500).json({ error: "Erreur interne serveur" });
-  }
+   res.sendFile(path.join(__dirname, 'public', 'jackpot.html'));
 });
+
 
 
 
