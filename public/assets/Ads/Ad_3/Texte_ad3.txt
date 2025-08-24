@@ -1,0 +1,15 @@
+🚨 [ALERTE SÉCURITÉ] VOTRE ORDINATEUR A ÉTÉ COMPROMIS 🚨
+
+Nous avons détecté une activité suspecte provenant de votre adresse IP 92.114.XX.XX (localisée en Fédération de Russie). Selon nos analyses, votre système a été infiltré par un groupe de cybercriminels associé à des acteurs étatiques russes.
+
+✔ Accès non autorisé à vos données personnelles (mots de passe, historiques, fichiers sensibles). 
+✔ Exfiltration de données vers un serveur basé à Moscou (AS48173). 
+✔ Logiciels malveillants installés en arrière-plan (dont "KremlinSpy v3.0" et "BabouchkaKeylogger").
+
+⚠️ QUE FAIRE MAINTENANT ?
+1️ - Ne paniquez pas (mais agissez vite). 2️ - Cliquez sur "PROTÉGER MON PC" pour lancer la désinfection. 
+3️ - Changez vos mots de passe (utilisez "J3D3t35taNguYy3L3sRusse5".
+
+
+
+POLICE : Inter
