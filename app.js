@@ -29,23 +29,36 @@ app.get('/jackpot', (req, res) => {
    res.sendFile(path.join(__dirname, 'public', 'jackpot.html'));
 });
 
-
-
-
-// Options SSL Let's Encrypt
-const sslOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/jackpoturss.ddns.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/jackpoturss.ddns.net/fullchain.pem')
-};
-
-// Serveur HTTPS sur le port 443
-https.createServer(sslOptions, app).listen(443, () => {
-  console.log('Serveur HTTPS démarré sur https://jackpoturss.ddns.net');
+app.get('/infos', (req, res) => {
+   res.sendFile(path.join(__dirname, 'public', 'infos.html'));
 });
 
-// Serveur HTTP sur le port 80, redirige vers HTTPS
-http.createServer((req, res) => {
-  res.writeHead(301, { "Location": "https://" + req.headers.host + req.url });
-  res.end();
-}).listen(80);
-console.log('Serveur HTTP démarré sur http://jackpoturss.ddns.net, redirection vers HTTPS');
+app.get('/infos2', (req, res) => {
+   res.sendFile(path.join(__dirname, 'public', 'infos2.html'));
+});
+
+
+
+
+// // Options SSL Let's Encrypt
+// const sslOptions = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/jackpoturss.ddns.net/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/jackpoturss.ddns.net/fullchain.pem')
+// };
+
+// // Serveur HTTPS sur le port 443
+// https.createServer(sslOptions, app).listen(3443, () => {
+//   console.log('Serveur HTTPS démarré sur https://jackpoturss.ddns.net');
+// });
+
+// // Serveur HTTP sur le port 80, redirige vers HTTPS
+// http.createServer((req, res) => {
+//   res.writeHead(301, { "Location": "https://" + req.headers.host + req.url });
+//   res.end();
+// }).listen(3000);
+// console.log('Serveur HTTP démarré sur http://jackpoturss.ddns.net, redirection vers HTTPS');
+const PORT = 3000;
+
+http.createServer(app).listen(PORT, () => {
+  console.log(`Serveur Node.js démarré sur http://localhost:${PORT}`);
+});

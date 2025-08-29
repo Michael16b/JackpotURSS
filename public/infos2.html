@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>JackpotURSS — Toutes les permissions camarade !</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .infos-urss-block {
+      background: rgba(217,4,41,0.97);
+      color: #FFD700;
+      border-radius: 12px;
+      box-shadow: 0 0 16px #FFD700;
+      max-width: 560px;
+      margin: 3em auto 2em auto;
+      font-family: 'Oswald', 'Arial Black', Arial, sans-serif;
+      padding: 2em 2em 1em 2em;
+    }
+    .infos-title {
+      font-size: 2em;
+      letter-spacing: 2px;
+      color: #FFD700;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px 8px #8B0000;
+    }
+    .infos-rus {
+      color: #FFD700;
+      font-size: 1em;
+      font-style: italic;
+      margin-bottom: 1.1em;
+      text-shadow: 1px 1px 6px #8B0000;
+    }
+    .infos-item {
+      margin-bottom: 1.3em;
+      background: rgba(255,215,0,0.09);
+      border-radius: 6px;
+      padding: 0.7em 1em 0.4em 1em;
+      color: #FFD700;
+      box-shadow: 0 0 5px #8B0000;
+      text-align: left;
+    }
+    .label { font-weight: bold; color: #FFD700;}
+    .label-rus { color: #FFD700; font-size: 0.95em; }
+    .infos-value { color: #FFD700; font-weight: bold;}
+    #map {
+      height: 230px;
+      margin: 0.5em 0 1.3em 0;
+      border: 2px solid #FFD700;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #8B0000;
+    }
+    .disclaimer {
+      color: #FFF;
+      margin-top: 2em;
+      background: rgba(217,4,41,0.9);
+      border-radius: 8px;
+      padding: 1em;
+      font-size: 1.1em;
+      text-align: center;
+    }
+    .disclaimer .rus { color: #FFD700; }
+    #video-cam {
+      width: 220px;
+      height: 160px;
+      border: 2px solid #FFD700;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #8B0000;
+      background: #222;
+      margin-top: 10px;
+      object-fit: cover;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 700px) {
+      .infos-urss-block { max-width: 98vw; padding:1em 0.3em;}
+      #map { height: 180px;}
+      #video-cam { width: 95vw; max-width: 300px; height: 120px; }
+    }
+  </style>
+</head>
+<body class="bg-urss">
+  <div class="container">
+    <div class="infos-urss-block text-center">
+      <div class="infos-title">
+        Toutes les permissions pour le rêve soviétique !<br>
+        <span class="infos-rus">Все разрешения для советской мечты!</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Géolocalisation :</span>
+        <span class="infos-value" id="geo">...en attente...</span><br>
+        <span class="label-rus">Геолокация</span>
+      </div>
+      <div id="map"></div>
+      <div class="infos-item">
+        <span class="label">Caméra & Micro :</span>
+        <span class="infos-value" id="cam">...en attente...</span><br>
+        <span class="label-rus">Камера и микрофон</span>
+        <video id="video-cam" autoplay playsinline></video>
+      </div>
+      <div class="infos-item">
+        <span class="label">Notifications :</span>
+        <span class="infos-value" id="notif">...en attente...</span><br>
+        <span class="label-rus">Уведомления</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Presse-papiers (clipboard) :</span>
+        <span class="infos-value" id="clip">...en attente...</span><br>
+        <span class="label-rus">Буфер обмена</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Bluetooth :</span>
+        <span class="infos-value" id="bt">...en attente...</span><br>
+        <span class="label-rus">Блютуз</span>
+      </div>
+      <div class="disclaimer mt-4">
+        Toutes ces demandes sont faites dans le respect du camarade.<br>
+        <span class="rus">Все эти запросы выполняются с уважением к товарищу.</span>
+        <br><br>
+        <small>
+          Le navigateur protège ta vie privée : tu peux tout refuser (mais c'est moins drôle).<br>
+          <span class="rus">Браузер защищает вашу конфиденциальность: вы можете всё отклонить (но это не так весело).</span>
+        </small>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // GEOLocalisation
+    function showMap(lat, lon, label) {
+      let map = L.map('map').setView([lat, lon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup(`<b>${label}</b><br><span style="color:#FFD700;">Вы здесь!</span>`).openPopup();
+    }
+    function demandeGeoloc() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          document.getElementById('geo').textContent =
+            `Accordée ! Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)} / Разрешено!`;
+          showMap(lat, lon, "Localisation GPS<br>Геолокация");
+        }, function(err) {
+          document.getElementById('geo').textContent =
+            "Refusée ou indisponible / Отклонено или недоступно";
+          document.getElementById('map').innerHTML =
+            '<div style="color:#FFD700">Carte indisponible<br><span style="color:#FFD700;">Карта недоступна</span></div>';
+        });
+      } else {
+        document.getElementById('geo').textContent =
+          "Non supportée / Не поддерживается";
+        document.getElementById('map').innerHTML =
+          '<div style="color:#FFD700">Carte indisponible<br><span style="color:#FFD700;">Карта недоступна</span></div>';
+      }
+    }
+
+    // Caméra & Micro
+    function demandeCamMicro() {
+      const video = document.getElementById('video-cam');
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video:true, audio:true})
+          .then(stream => {
+            document.getElementById('cam').textContent =
+              "Accordé ! Caméra affichée ci-dessous / Разрешено! Камера ниже";
+            video.srcObject = stream;
+            // Si tu veux couper le micro, tu peux désactiver les tracks audio :
+            // stream.getAudioTracks().forEach(track => track.enabled = false);
+          })
+          .catch(err => {
+            document.getElementById('cam').textContent =
+              "Refusé ou indisponible / Отклонено или недоступно";
+            video.style.display = "none";
+          });
+      } else {
+        document.getElementById('cam').textContent =
+          "Non supporté / Не поддерживается";
+        video.style.display = "none";
+      }
+    }
+
+    // Notifications
+    function demandeNotif() {
+      if ("Notification" in window) {
+        Notification.requestPermission().then(result => {
+          if (result === "granted") {
+            document.getElementById('notif').textContent =
+              "Accordées ! / Разрешено!";
+            // Optionnel : envoyer une notification
+            new Notification("JackpotURSS", {body:"Merci camarade !"});
+          } else if (result === "denied") {
+            document.getElementById('notif').textContent =
+              "Refusées / Отклонено";
+          } else {
+            document.getElementById('notif').textContent =
+              "En attente / В ожидании";
+          }
+        });
+      } else {
+        document.getElementById('notif').textContent =
+          "Non supporté / Не поддерживается";
+      }
+    }
+
+    // Clipboard
+    function demandeClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText()
+          .then(text => {
+            document.getElementById('clip').textContent =
+              `Accordé ! Contenu: "${text}" / Разрешено!`;
+          })
+          .catch(err => {
+            document.getElementById('clip').textContent =
+              "Refusé ou indisponible / Отклонено или недоступно";
+          });
+      } else {
+        document.getElementById('clip').textContent =
+          "Non supporté / Не поддерживается";
+      }
+    }
+
+    // Bluetooth
+    function demandeBluetooth() {
+      if (navigator.bluetooth && navigator.bluetooth.requestDevice) {
+        navigator.bluetooth.requestDevice({acceptAllDevices:true})
+          .then(device => {
+            document.getElementById('bt').textContent =
+              `Accordé ! Appareil trouvé: ${device.name || "inconnu"} / Разрешено!`;
+          })
+          .catch(err => {
+            document.getElementById('bt').textContent =
+              "Refusé ou indisponible / Отклонено или недоступно";
+          });
+      } else {
+        document.getElementById('bt').textContent =
+          "Non supporté / Не поддерживается";
+      }
+    }
+
+    // Au chargement de la page, on demande tout !
+    window.addEventListener('DOMContentLoaded', function() {
+      demandeGeoloc();
+      demandeCamMicro();
+      demandeNotif();
+      demandeClipboard();
+      demandeBluetooth();
+    });
+  </script>
+</body>
+</html>

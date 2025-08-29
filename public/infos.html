@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ce que nous savons sur toi, camarade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .infos-urss-block {
+      background: rgba(217,4,41,0.97);
+      color: #FFD700;
+      border-radius: 12px;
+      box-shadow: 0 0 16px #FFD700;
+      max-width: 540px;
+      margin: 3em auto 2em auto;
+      font-family: 'Oswald', 'Arial Black', Arial, sans-serif;
+      padding: 2em 2em 1em 2em;
+    }
+    .infos-title {
+      font-size: 2em;
+      letter-spacing: 2px;
+      color: #FFD700;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px 8px #8B0000;
+    }
+    .infos-rus {
+      color: #FFD700;
+      font-size: 1em;
+      font-style: italic;
+      margin-bottom: 1.1em;
+      text-shadow: 1px 1px 6px #8B0000;
+    }
+    .infos-item {
+      margin-bottom: 1.3em;
+      background: rgba(255,215,0,0.09);
+      border-radius: 6px;
+      padding: 0.7em 1em 0.4em 1em;
+      color: #FFD700;
+      box-shadow: 0 0 5px #8B0000;
+    }
+    .label { font-weight: bold; color: #FFD700;}
+    .label-rus { color: #FFD700; font-size: 0.95em; }
+    .infos-value { color: #FFD700; font-weight: bold;}
+    #map {
+      height: 230px;
+      margin: 0.5em 0 1.3em 0;
+      border: 2px solid #FFD700;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #8B0000;
+    }
+    .disclaimer {
+      color: #FFF;
+      margin-top: 2em;
+      background: rgba(217,4,41,0.9);
+      border-radius: 8px;
+      padding: 1em;
+      font-size: 1.1em;
+    }
+    .disclaimer .rus { color: #FFD700; }
+    @media (max-width: 700px) {
+      .infos-urss-block { max-width: 98vw; padding:1em 0.3em;}
+      #map { height: 180px;}
+    }
+  </style>
+</head>
+<body class="bg-urss">
+  <div class="container">
+    <div class="infos-urss-block text-center">
+      <div class="infos-title">
+        Ce que nous savons sur toi, camarade<br>
+        <span class="infos-rus">Вот что мы знаем о тебе, товарищ</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Adresse IP :</span>
+        <span class="infos-value" id="ip">...chargement...</span><br>
+        <span class="label-rus">IP-адрес</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Adresse approximative :</span>
+        <span class="infos-value" id="loc">...chargement...</span><br>
+        <span class="label-rus">Примерный адрес</span>
+      </div>
+      <div id="map"></div>
+      <div class="infos-item">
+        <span class="label">Navigateur :</span>
+        <span class="infos-value" id="browser"></span><br>
+        <span class="label-rus">Браузер</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Système d’exploitation :</span>
+        <span class="infos-value" id="os"></span><br>
+        <span class="label-rus">Операционная система</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Langue préférée :</span>
+        <span class="infos-value" id="lang"></span><br>
+        <span class="label-rus">Предпочтительный язык</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Fuseau horaire :</span>
+        <span class="infos-value" id="tz"></span><br>
+        <span class="label-rus">Часовой пояс</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Résolution d’écran :</span>
+        <span class="infos-value" id="screen"></span><br>
+        <span class="label-rus">Разрешение экрана</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Plugins installés :</span>
+        <span class="infos-value" id="plugins"></span><br>
+        <span class="label-rus">Установленные плагины</span>
+      </div>
+      <div class="infos-item">
+        <span class="label">Empreinte numérique :</span>
+        <span class="infos-value" id="fingerprint"></span><br>
+        <span class="label-rus">Цифровой отпечаток</span>
+      </div>
+      <div class="disclaimer mt-4">
+        Nous ne connaissons pas ton nom, ton numéro de téléphone ou ton adresse réelle (sauf si tu les écris ici toi-même, camarade).<br>
+        <span class="rus">Мы не знаем твое имя, номер телефона или настоящий адрес (если только ты сам не напишешь их здесь, товарищ).</span>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Infos navigateur/OS
+    function getBrowserInfo() {
+      const ua = navigator.userAgent;
+      if (ua.includes("Firefox")) return "Mozilla Firefox";
+      if (ua.includes("Chrome") && !ua.includes("Edg")) return "Google Chrome";
+      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Apple Safari";
+      if (ua.includes("Edg")) return "Microsoft Edge";
+      if (ua.includes("Opera") || ua.includes("OPR")) return "Opera";
+      return ua.split(' ')[0];
+    }
+    function getOSInfo() {
+      const ua = navigator.userAgent;
+      if (ua.includes("Win")) return "Windows";
+      if (ua.includes("Mac")) return "MacOS";
+      if (ua.includes("Linux")) return "Linux";
+      if (ua.includes("Android")) return "Android";
+      if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
+      return "Inconnu";
+    }
+    function getPlugins() {
+      let list = [];
+      for (let i=0; i<navigator.plugins.length; ++i) {
+        list.push(navigator.plugins[i].name);
+      }
+      return list.length ? list.join(", ") : "Aucun / Нет";
+    }
+    function getFingerprint() {
+      let str = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width+"x"+screen.height,
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      ].join("::");
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return "ID-" + Math.abs(hash);
+    }
+    document.getElementById('browser').textContent = getBrowserInfo();
+    document.getElementById('os').textContent = getOSInfo();
+    document.getElementById('lang').textContent = navigator.language || "Inconnu";
+    document.getElementById('tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || "Inconnu";
+    document.getElementById('screen').textContent = `${screen.width} x ${screen.height}`;
+    document.getElementById('plugins').textContent = getPlugins();
+    document.getElementById('fingerprint').textContent = getFingerprint();
+
+    // Fonction carte, affichage
+    function showMap(lat, lon, label) {
+      let map = L.map('map').setView([lat, lon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup(`<b>${label}</b><br><span style="color:#FFD700;">Вы здесь!</span>`).openPopup();
+    }
+
+    // Géoloc à l'ouverture
+    window.addEventListener('DOMContentLoaded', function() {
+      let geoSuccess = false;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          geoSuccess = true;
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          document.getElementById('loc').textContent = `Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)}`;
+          showMap(lat, lon, "Localisation GPS<br>Геолокация");
+          // IP via ipapi.co (seulement pour l'IP, l'adresse sera GPS)
+          fetch('https://ipapi.co/json/')
+            .then(r => r.json())
+            .then(data => {
+              document.getElementById('ip').textContent = data.ip || "Inconnue / Неизвестно";
+            }).catch(() => {
+              document.getElementById('ip').textContent = "Inconnue / Неизвестно";
+            });
+        }, function(err) {
+          // Si refusé ou erreur, fallback IP
+          fallbackIpLoc();
+        });
+      } else {
+        fallbackIpLoc();
+      }
+    });
+
+    // Fallback IP
+    function fallbackIpLoc() {
+      fetch('https://ipapi.co/json/')
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('ip').textContent = data.ip || "Inconnue / Неизвестно";
+          let loc = "Inconnue / Неизвестно";
+          if (data.city && data.country_name) {
+            loc = `${data.city}, ${data.country_name}`;
+          } else if (data.country_name) {
+            loc = `${data.country_name}`;
+          }
+          document.getElementById('loc').textContent = loc;
+          if (data.latitude && data.longitude) {
+            showMap(data.latitude, data.longitude, `${loc}<br>По IP`);
+          } else {
+            document.getElementById('map').innerHTML =
+              '<div style="color:#FFD700">Carte indisponible<br><span style="color:#FFD700;">Карта недоступна</span></div>';
+          }
+        })
+        .catch(() => {
+          document.getElementById('ip').textContent = "Inconnue / Неизвестно";
+          document.getElementById('loc').textContent = "Inconnue / Неизвестно";
+          document.getElementById('map').innerHTML =
+            '<div style="color:#FFD700">Carte indisponible<br><span style="color:#FFD700;">Карта недоступна</span></div>';
+        });
+    }
+  </script>
+</body>
+</html>

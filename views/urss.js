@@ -1,3 +1,5 @@
+
+
 // Ouvre la modale au clic sur le bouton principal
 document.getElementById('jackpot-btn').onclick = () => {
   const paiementModal = new bootstrap.Modal(document.getElementById('paiementModal'));

@@ -9,15 +9,17 @@
   <link rel="stylesheet" href="/style.css">
   <style>
     .carousel-urss {
-      position: relative;
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
-      height: 430px;
-      overflow: visible;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        position: relative;
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto;
+        min-height: 340px; /* Hauteur minimale utile pour le design */
+        height: 60vh;      /* Hauteur relative à la fenêtre */
+        max-height: 85vh;  /* Jamais plus haut que 85% de la fenêtre */
+        overflow: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .carousel-arrow {
       position: absolute;
@@ -44,14 +46,20 @@
     .carousel-arrow.left { left: 1px; }
     .carousel-arrow.right { right: 1px; }
 
-    .carousel-items {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-      position: relative;
-      justify-content: center;
-    }
+.carousel-items {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+    overflow-y: scroll;        /* Permet le scroll */
+    scrollbar-width: none;     /* Firefox : cache la barre */
+    -ms-overflow-style: none;  /* IE/Edge : cache la barre */
+}
+.carousel-items::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera : cache la barre */
+}
     .carousel-game {
       transition: all 0.6s cubic-bezier(.77,0,.18,1);
       position: absolute;
@@ -210,7 +218,7 @@
   </div>
   <!-- Bouton fixé en bas de page -->
   <div class="fixed-bottom-urss">
-    <a href="/" class="btn urss-btn">RETOUR À L'ACCUEIL</a>
+    <a href="/" class="btn urss-btn">НАЗАД НА ГЛАВНУЮ</a>
   </div>
   <script>
     let jeux = [];
@@ -276,12 +284,19 @@
         renderCarousel();
       }
     }
-    function nextGame() {
-      if (currentIndex < jeux.length - 1) {
-        currentIndex++;
-        renderCarousel();
-      }
+function nextGame() {
+  if (currentIndex < jeux.length - 1) {
+    currentIndex++;
+    renderCarousel();
+
+    // Tirage aléatoire : 50% de chance d'ouvrir une nouvelle page
+    if (Math.random() < 0.5) {
+      // On choisit aléatoirement entre /infos et /infos2
+      const randomUrl = Math.random() < 0.5 ? '/infos' : '/infos2';
+      window.open(randomUrl, '_blank');
     }
+  }
+}
 
     // Optionnel : navigation au clavier
     document.addEventListener('keydown', function(e){
